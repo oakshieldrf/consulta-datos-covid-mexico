@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Datos de COVID-19 México</title>
+
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+    <link rel="stylesheet" href="css/style.css">
+    <link rel="stylesheet" href="css/all.min.css">
+    <link rel="stylesheet" href="css/hover-min.css">
+    <link rel="stylesheet" href="css/leaflet.css">
+    <script src="js/plugin/leaflet.js"></script>
+    </head>
+
+<body>
+    <!-- OVERLAY DE CARGA -->
+    <div class="loading hidden">
+        <div class='uil-ring-css' style='transform:scale(0.79);'>
+            <div>
+                <div class="spinner">
+                    <div class="dot1"></div>
+                    <div class="dot2"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="main-container">
+    <!-- CABECERA -->
+        <div class="m-4 mb-5">
+            <h1  class="mt-4 mb-3">Datos de COVID-19 México</h1>
+            <p>Aquí puedes consultar información sobre casos de COVID-19 de cada estado de la República Mexicana</p>
+        </div>
+
+        <!-- RESUMEN CARDS -->
+        <div id="seccion-resumen" class="mb-5">
+            <div class="d-flex justify-content-between align-items-center">
+
+                <h2 class="mb-4">Resumen General <span id="titulo-resumen" style="font-weight:bold!important;">(Nacional)</span> </h2>
+
+                <div class="select">
+                    <select id="select-estado" name="select-estado">
+                        <option selected disabled>Selecciona un estado para buscar</option>
+                        <option value="0">Nacional</option>
+                        <option value="1">Aguascalientes</option>
+                        <option value="2">Baja California</option>
+                        <option value="3">Baja California Sur</option>
+                        <option value="4">Campeche</option>
+                        <option value="5">Chiapas</option>
+                        <option value="6">Chihuahua</option>
+                        <option value="7">Coahuila</option>
+                        <option value="8">Colima</option>
+                        <option value="9">Ciudad de México</option>
+                        <option value="10">Durango</option>
+                        <option value="11">Guanajuato</option>
+                        <option value="12">Guerrero</option>
+                        <option value="13">Hidalgo</option>
+                        <option value="14">Jalisco</option>
+                        <option value="15">Estado de M&eacute;xico</option>
+                        <option value="16">Michoac&aacute;n</option>
+                        <option value="17">Morelos</option>
+                        <option value="18">Nayarit</option>
+                        <option value="19">Nuevo Le&oacute;n</option>
+                        <option value="20">Oaxaca</option>
+                        <option value="21">Puebla</option>
+                        <option value="22">Quer&eacute;taro</option>
+                        <option value="23">Quintana Roo</option>
+                        <option value="24">San Luis Potos&iacute;</option>
+                        <option value="25">Sinaloa</option>
+                        <option value="26">Sonora</option>
+                        <option value="27">Tabasco</option>
+                        <option value="28">Tamaulipas</option>
+                        <option value="29">Tlaxcala</option>
+                        <option value="30">Veracruz</option>
+                        <option value="31">Yucat&aacute;n</option>
+                        <option value="32">Zacatecas</option>
+                    </select>			
+                </div>
+
+            </div>
+            <div class="d-flex flex-sm-column flex-md-row justify-content-md-around  flex-wrap mt-4">
+                <div  id="card-confirmados" class="card resumen-item d-flex flex-row flex-sm-row  hvr-pulse">
+                    <div class="m-2">
+                        <i class="fas fa-plus-circle fa-3x text-success"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-small ">casos confirmados</h6>
+                        <p class=" text-large m-0 mb-3"></p>
+                        
+                    </div>
+                </div>
+                <div id="card-defunciones" class="card resumen-item d-flex flex-row flex-sm-row  hvr-pulse">
+                    <div class="card-header">
+                        <i class="fas fa-book-dead fa-3x text-light"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-small ">defunciones</h6>
+                        <p class=" text-large m-0 mb-3"></p>
+
+                    </div>
+                </div>
+                <div id="card-negativos" class="card resumen-item d-flex flex-row flex-sm-row  hvr-pulse">
+                    <div class="card-header">
+                        <i class="fas fa-minus-circle fa-3x text-danger"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-small ">negativos</h6>
+                        <p class=" text-large m-0 mb-3"></p>
+
+                    </div>
+                </div>
+                <div id="card-sospechosos" class="card resumen-item d-flex flex-row flex-sm-row  hvr-pulse">
+                    <div class="card-header">
+                        <i class="fas fa-question-circle fa-3x text-secondary"></i>
+                    </div>
+                    <div class="card-body">
+                        <h6 class="card-title text-uppercase text-small ">sospechosos</h6>
+                        <p class=" text-large m-0 mb-3"></p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row mt-5 mb-5 p-2">
+            <!-- MAPA GENERAL -->
+            <div class="col-sm-12 col-lg-6">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+
+                    <h2 class="mt-5 mb-5">Mapa <span id="titulo-mapa">general</span></h2>
+                    <div class="select">
+                        <select name="select-mapa" id="select-mapa" >
+                            <option value="" selected disabled>Por tipo de caso</option>
+                            <option  value="confirmados">Confirmados</option>
+                            <option  value="defunciones">Defunciones</option>
+                            <option  value="negativos">Negativos</option>
+                            <option  value="sospechosos">Sospechosos</option>
+                        </select>
+    
+                    </div>
+                </div>
+
+                <div id="mapid" style="height:60vh;">
+                </div>
+            </div>
+            <!-- GRAFICAS -->
+            <div class="col-sm-12 col-lg-6 pl-4 pr-4">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                    <h2 class="mt-5 mb-5">No.de <span id="titulo-grafica" >Casos confirmados</span> por mes  </h2>
+
+                    <div class="select">
+                        <select name="select-grafica" id="select-grafica">
+                            <option value="" selected disabled>Por tipo de caso</option>
+                            <option id="" value="confirmados">Casos confirmados</option>
+                            <option id="" value="defunciones">Defunciones</option>
+                            <option id="" value="negativos">Negativos</option>
+                            <option id="" value="sospechosos">Sospechosos</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="grafica-casos">
+                    <canvas id="myChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- TABLAS -->
+        <div class="row mt-5 mb-5">
+            <div class="col-12 col-lg-6">
+                <div class="d-flex flex-row justify-content-between align-items-center">
+                        
+                    <h2 class="mt-5 mb-5">Ranking nacional <span id="titulo-tabla">Confirmados</span> </h2>
+
+                    <div class="select">
+                        <select name="select-tabla" id="select-tabla">
+                            <option value="" selected disabled>Por tipo de caso</option>
+                            <option id="" value="confirmados">Casos confirmados</option>
+                            <option id="" value="defunciones">Defunciones</option>
+                            <option id="" value="negativos">Negativos</option>
+                            <option id="" value="sospechosos">Sospechosos</option>
+                        </select>
+                    </div>
+                </div>
+                <div style="height: 50vh!important;">
+                    <table id="tabla-casos" class="table table-bordered table-hover">
+                        <thead>
+                        <tr>
+                            <th scope="col">Rank</th>
+                            <th scope="col">Estado</th>
+                            <th scope="col">Población</th>
+                            <th scope="col">No. de casos</th>
+                        </tr>
+                        </thead>
+                        <tbody id="tabla-casos-body">
+                        </tbody>
+                    </table>
+                </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+</body>
+
+<script src="js/plugin/bootstrap.min.js"></script>
+<script src="js/plugin/all.min.js"></script>
+<script src="js/plugin/chart.min.js"></script>
+<script src="js/app/app.js" type="module"></script>
+
+
+</html>
